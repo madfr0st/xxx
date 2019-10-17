@@ -9,6 +9,7 @@ import java.util.Set;
 public class Distinct {
     static Set<Integer> tree1[];
     static Set<Integer> tree2[];
+    static Set<Integer> ans;
     public static void main(String[] args) throws IOException {
         BufferedReader inp = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter out = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -33,19 +34,32 @@ public class Distinct {
         constructTree(given1,tree1,0,size-1,0);
         constructTree(given2,tree2,0,size-1,0);
         int querry = Integer.parseInt(inp.readLine());
+//        for(int i=0;i<s;i++){
+//            System.out.println(tree1[i]);
+//        }
+//        for(int i=0;i<s;i++){
+//            System.out.println(tree2[i]);
+//        }
         for(int i=0;i<querry;i++){
             String[] s4 = inp.readLine().split(" ");
             int a = Integer.parseInt(s4[0]);
             int b = Integer.parseInt(s4[1]);
             int c = Integer.parseInt(s4[2]);
             int d = Integer.parseInt(s4[3]);
+            ans = new HashSet<>();
             Set<Integer> set1 = rangeQuery(tree1,a-1,b-1,size);
             Set<Integer> set2 = rangeQuery(tree2,c-1,d-1,size);
             set1.addAll(set2);
             a = set1.size();
-            System.out.println(set1);
+            //System.out.println(set1);
             out.write(Integer.toString(a)+"\n");
         }
+//        for(int i=0;i<s;i++){
+//            System.out.println(tree1[i]);
+//        }
+//        for(int i=0;i<s;i++){
+//            System.out.println(tree2[i]);
+//        }
         out.flush();
     }
     static void constructTree(int[] given,Set<Integer> set[],int low,int high,int pos){
@@ -85,10 +99,11 @@ public class Distinct {
             return s;
         }
         int mid = (low+high)/2;
-
         Set<Integer> r = rangeQuery(segmentTree,low,mid,qlow,qhigh,2*pos+1);
-        r.addAll(rangeQuery(segmentTree,mid+1,high,qlow,qhigh,2*pos+2));
-        return r;
+        Set<Integer> r1 = rangeQuery(segmentTree,mid+1,high,qlow,qhigh,2*pos+2);
+        ans.addAll(r);
+        ans.addAll(r1);
+        return ans;
     }
 
 }
