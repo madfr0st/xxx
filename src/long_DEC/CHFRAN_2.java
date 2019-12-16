@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 
 public class CHFRAN_2 {
+    static long constant = 1000000007;
     public static void main(String[] args)throws IOException {
         BufferedReader inp = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter out = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -14,38 +15,41 @@ public class CHFRAN_2 {
             int size = Integer.parseInt(inp.readLine());
             int totalSets = size;
 
+            ArrayList<Long> all = new ArrayList<>();
+            HashSet<Long> set = new HashSet<>();
+            HashMap<Long,Long> mapStart = new HashMap<>();
+            HashMap<Long,Long> mapFinish = new HashMap<>();
+            for (int i = 0; i < size; i++) {
+                String[] s1 = inp.readLine().split(" ");
+                long a = Integer.parseInt(s1[0]);
+                long b = Integer.parseInt(s1[1]);
+                a*=constant;
+                b*=constant;
 
-                //int[][] given = new int[size][2];
-                ArrayList<Integer> all = new ArrayList<>();
-                Set<Integer> set = new HashSet<>();
-                Map<Integer, Integer> mapStart = new HashMap<>();
-                Map<Integer, Integer> mapFinish = new HashMap<>();
-                for (int i = 0; i < size; i++) {
-                    String[] s1 = inp.readLine().split(" ");
-                    int a = Integer.parseInt(s1[0]);
-                    int b = Integer.parseInt(s1[1]);
-                    if (!set.contains(a)) {
-                        set.add(a);
-                        all.add(a);
-                    }
-                    if (!set.contains(b)) {
-                        set.add(b);
-                        all.add(b);
-                    }
-                    if (mapStart.containsKey(a)) {
-                        mapStart.put(a, mapStart.get(a) + 1);
-                    } else {
-                        mapStart.put(a, 1);
-                    }
-                    if (mapFinish.containsKey(b)) {
-                        mapFinish.put(b, mapFinish.get(b) + 1);
-                    } else {
-                        mapFinish.put(b, 1);
-                    }
+                if (!set.contains(a)) {
+                    set.add(a);
+                    all.add(a);
                 }
+                if (!set.contains(b)) {
+                    set.add(b);
+                    all.add(b);
+                }
+                if (mapStart.containsKey(a)) {
+                    mapStart.put(a, mapStart.get(a) + 1);
+                } else {
+                    mapStart.put(a, 1l);
+                }
+                if (mapFinish.containsKey(b)) {
+                    mapFinish.put(b, mapFinish.get(b) + 1);
+                } else {
+                    mapFinish.put(b, 1l);
+                }
+            }
+
+
             if(size>1) {
-                int[] dpLeft = new int[all.size()];
-                int[] dpRight = new int[all.size()];
+                long[] dpLeft = new long[all.size()];
+                long[] dpRight = new long[all.size()];
 
                 int closedLeft = 0;
                 int closedRight = 0;
@@ -55,8 +59,8 @@ public class CHFRAN_2 {
                 //System.out.println(all);
                 for (int i = 0; i < size; i++) {
 
-                    int a = all.get(i);
-                    int b = all.get(size - 1 - i);
+                    long a = all.get(i);
+                    long b = all.get(size - 1 - i);
 
                     if (mapFinish.containsKey(a)) {
                         closedLeft += mapFinish.get(a);
@@ -73,18 +77,18 @@ public class CHFRAN_2 {
                     }
                 }
 
-                int ans = Integer.MAX_VALUE;
+                long ans = Long.MAX_VALUE;
                 for (int i = 1; i < size; i++) {
-                    int a = dpLeft[i - 1];
-                    int b = dpRight[i];
+                    long a = dpLeft[i - 1];
+                    long b = dpRight[i];
                     if (a > 0 && b > 0) {
-                        int active = totalSets - a - b;
+                        long active = totalSets - a - b;
                         ans = Math.min(active, ans);
                     }
 
                 }
 
-                if (ans == Integer.MAX_VALUE) {
+                if (ans == Long.MAX_VALUE) {
                     out.write(-1+"\n");
                     //System.out.println(-1);
                 } else {

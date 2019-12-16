@@ -12,28 +12,70 @@ public class BINOFEV {
         int testCase = Integer.parseInt(inp.readLine());
         for(int t=0;t<testCase;t++) {
             String[] s1 = inp.readLine().split(" ");
-            long power = Long.parseLong(s1[0]);
+            long N = Long.parseLong(s1[0]);
             long n = Long.parseLong(s1[1]);
             long r = Long.parseLong(s1[2]);
-            long start = System.currentTimeMillis();
             long ans = 0;
             long previous = 1;
-            long denum = denum(n,r);
-            for(int i=0;i<=power;i++){
-                long pow = previous;
-                if(pow>=r){
-                    ans += ncr(pow,r);
-                    ans %= mod;
+
+            long denum = denum(n, r);
+            if(r==2){
+                if(n!=1) {
+                    long a = power(n, 2);
+                    long b = power(a, N);
+                    b--;
+                    b%=mod;
+                    if(b<0){
+                        b+=mod;
+                    }
+                    long c = modInverse(a - 1, mod);
+
+                    long x = a * b;
+                    x %= mod;
+                    x *= c;
+                    x %= mod;
+
+                    a = n;
+                    b = power(a, N);
+                    b--;
+                    b%=mod;
+                    if(b<0){
+                        b+=mod;
+                    }
+                    c = modInverse(a - 1, mod);
+                    long y = a * b;
+                    y %= mod;
+                    y *= c;
+                    y %= mod;
+                    x = x - y;
+                    if (x < 0) {
+                        x += mod;
+                    }
+                    x %= mod;
+                    x %= mod;
+                    x *= denum;
+                    x %= mod;
+
+                    out.write(x + "\n");
                 }
-                previous = (n*previous)%mod;
+                else{
+                    out.write(0+"\n");
+                }
+
             }
-            ans *= denum;
-            ans %= mod;
-            out.write(ans+"\n");
-            long stop = System.currentTimeMillis();
-            double time = stop-start;
-            time /= 1000;
-            //System.out.println(time);
+            else {
+                for (int i = 0; i <= N; i++) {
+                    long pow = previous;
+                    if (pow >= r) {
+                        ans += ncr(pow, r);
+                        ans %= mod;
+                    }
+                    previous = (n * previous) % mod;
+                }
+                ans *= denum;
+                ans %= mod;
+                out.write(ans + "\n");
+            }
 
         }
         out.flush();
@@ -60,7 +102,7 @@ public class BINOFEV {
             denum *= (r-i);
             denum %= mod;
         }
-        denum = inverseModulo(denum,mod);
+        denum = modInverse(denum,mod);
         return denum;
     }
     static long power(long a,long b){
@@ -86,40 +128,38 @@ public class BINOFEV {
             ans*=list.get(i);
             ans %= mod;
         }
+        if (ans<0){
+            ans+=mod;
+        }
         return ans;
     }
-
-    static long inverseModulo(long a, long m)
+    static long modInverse(long a, long m)
     {
-        long m0 = m;
-        long y = 0, x = 1;
+        long g = gcd(a, m);
+        return power(a, m - 2, m);
+    }
 
-        if (m == 1)
-            return 0;
+    // To compute x^y under modulo m
+    static long power(long x, long y, long m)
+    {
+        if (y == 0)
+            return 1;
 
-        while (a > 1)
-        {
-            // q is quotient
-            long q = a / m;
+        long p = power(x, y / 2, m) % m;
+        p = (p * p) % m;
 
-            long t = m;
+        if (y % 2 == 0)
+            return p;
+        else
+            return (x * p) % m;
+    }
 
-            // m is remainder now, process
-            // same as Euclid's algo
-            m = a % m;
-            a = t;
-            t = y;
-
-            // Update x and y
-            y = x - q * y;
-            x = t;
-        }
-
-        // Make x positive
-        if (x < 0)
-            x += m0;
-
-        return x;
+    // Function to return gcd of a and b
+    static long gcd(long a, long b)
+    {
+        if (a == 0)
+            return b;
+        return gcd(b % a, a);
     }
 
 }
