@@ -1,4 +1,6 @@
-package imp;
+package GFG;
+
+import java.util.*;
 
 class Pair<U extends Comparable<U>, V extends Comparable<V>>
         implements Comparable<Pair<U,V>>{
@@ -6,7 +8,7 @@ class Pair<U extends Comparable<U>, V extends Comparable<V>>
     public final U a;
     public final V b;
 
-    private Pair(U a, V b) {
+    public Pair(U a, V b) {
         this.a = a;
         this.b = b;
     }
@@ -45,7 +47,7 @@ class Pair<U extends Comparable<U>, V extends Comparable<V>>
 
     // This Overriding used to compare two pairs on the basis of Second element
     //    @Override
-    //    public int compareTo(Pair.java<U, V> o) {
+    //    public int compareTo(Pair<U, V> o) {
     //        return getV().compareTo(o.getV());
     //    }
 
@@ -56,17 +58,29 @@ class Pair<U extends Comparable<U>, V extends Comparable<V>>
     private V getV() {
         return b;
     }
+}
+
+public class Main {
+
     public static void main(String[] args){
+
         Pair<Integer,Integer> pair1 = new Pair<>(1,2);
-        Pair<Integer,Integer> pair2 = new Pair<>(1,2);
-        Pair<Pair<Integer,Integer>,Integer> pair3 = new Pair<>(new Pair<>(1,2),3);
-        Pair<Integer,Pair<Integer,Integer>> pair4 = new Pair<>(1,new Pair<>(2,3));
-        Pair<Pair<Integer,Integer>,Integer> pair5 = new Pair<>(new Pair<>(1,2),3);
+        Pair<Integer,Integer> pair2 = new Pair<>(2,2);
+        Pair<Integer,Integer> pair3 = new Pair<>(3,2);
+        Pair<Integer,Integer> pair4 = new Pair<>(4,2);
+        Pair<Integer,Integer> pair5 = new Pair<>(5,2);
 
-        System.out.println(pair1.equals(pair2));
-        System.out.println(pair3.equals(pair4));
-        System.out.println(pair3.equals(pair5));
+        ArrayList<Pair<Integer,Integer>> list = new ArrayList<>();
 
+        list.add(pair2);
+        list.add(pair5);
+        list.add(pair1);
+        list.add(pair4);
+        list.add(pair3);
+
+        System.out.println(list);
+        Collections.sort(list);
+        System.out.println(list);
 
     }
 }
